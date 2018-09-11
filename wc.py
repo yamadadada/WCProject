@@ -2,6 +2,7 @@ import argparse
 import os.path
 
 
+# 解析命令行参数
 def command_parse():
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', action='store_true', default=False, help='计算文件的字符数')
@@ -26,7 +27,9 @@ def command_parse():
     return param, file_path
 
 
-def get_appends(file, data):
+def get_appends(file):
+    with open(file, 'r') as f:
+        data = f.read()
     empty = 0
     code = 0
     annotation = 0
@@ -52,28 +55,22 @@ def get_appends(file, data):
     print("文件（" + file + "）的注释行数： " + str(annotation))
 
 
-def get_chars(file, append):
+def get_chars(file):
     with open(file, 'r') as f:
         data = f.read()
         print("文件（" + file + "）的字符数： " + str(len(data)))
-        if append:
-            get_appends(file, data)
 
 
-def get_words(file, append):
+def get_words(file):
     with open(file, 'r') as f:
         data = f.read()
         print("文件（" + file + "）的词的数目： " + str(len(data.split())))
-        if append:
-            get_appends(file, data)
 
 
-def get_lines(file, append):
+def get_lines(file):
     with open(file, 'r') as f:
         data = f.read()
         print("文件（" + file + "）的行数： " + str(len(data.split("\n"))))
-        if append:
-            get_appends(file, data)
 
 
 def get_file_by_dir(root, suffix):
@@ -110,14 +107,17 @@ def main():
             print("输入的路径不是目录！")
             print("ERROR: " + file_path)
             exit()
+        # 递归遍历子目录中所有符合条件的文件
         file_list = get_file_by_dir(file_path, suffix)
         for file in file_list:
             if 'c' in param:
-                get_chars(file, append)
+                get_chars(file)
             if 'w' in param:
-                get_words(file, append)
+                get_words(file)
             if 'l' in param:
-                get_lines(file, append)
+                get_lines(file)
+            if 'a' in param:
+                get_appends(file)
     # 如果输入的是文件的路径
     else:
         # 判断路径是否是文件的路径
@@ -126,11 +126,13 @@ def main():
             print("ERROR: " + file_path)
             exit()
         if 'c' in param:
-            get_chars(file_path, append)
+            get_chars(file_path)
         if 'w' in param:
-            get_words(file_path, append)
+            get_words(file_path)
         if 'l' in param:
-            get_lines(file_path, append)
+            get_lines(file_path)
+        if 'a' in param:
+            get_appends(file_path)
 
 
 if __name__ == '__main__':
