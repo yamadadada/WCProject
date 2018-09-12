@@ -14,6 +14,7 @@ def command_parse():
     parser.add_argument(action="store", dest="file")
     args = parser.parse_args()
     file_path = args.file
+    # 通过往字符串中加入各操作的字母传递信息
     param = ''
     if args.c:
         param = param + 'c'
@@ -25,7 +26,7 @@ def command_parse():
         param = param + 's'
     if args.a:
         param = param + 'a'
-    # 自动补充当前路径
+    # 如果输入的是相对路径，自动补充当前路径
     if "\\" not in file_path:
         file_path = os.path.abspath(os.path.join(os.getcwd(), "..")) + "\\" + file_path
     return param, file_path
@@ -40,6 +41,8 @@ def get_chars(file):
 def get_words(file):
     with open(file, 'r') as f:
         data = f.read()
+        # 将所有不是英文的字符replace成空格，使用split查询list长度即可
+        data = re.sub('[^a-zA-Z]', ' ', data)
         print("文件（" + file + "）的词的数目： " + str(len(data.split())))
 
 
@@ -55,6 +58,7 @@ def get_appends(file):
     empty = 0
     code = 0
     annotation = 0
+    # 标识多行注释
     is_annotation = False
     for line in data.split('\n'):
         if is_annotation:
@@ -62,6 +66,7 @@ def get_appends(file):
             if '*/' in line:
                 is_annotation = False
             continue
+            # 去除空格等无用字符
         visual_line = line.replace('\t', '').replace(' ', '')
         if len(visual_line) < 2:
             empty = empty + 1
@@ -93,7 +98,6 @@ def get_file_recursive(root, pattern):
 # 通过正则表达式不递归查找文件
 def get_file(root, pattern):
     file_list = []
-    # 获取根路径
     dir_list = os.listdir(root)
     for i in range(len(dir_list)):
         path = os.path.join(root, dir_list[i])
