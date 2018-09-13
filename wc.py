@@ -1,6 +1,7 @@
 import argparse
 import os.path
 import re
+import time
 
 
 # 解析命令行参数
@@ -33,13 +34,13 @@ def command_parse():
 
 
 def get_chars(file):
-    with open(file, 'r') as f:
+    with open(file, 'r', encoding='UTF-8') as f:
         data = f.read()
         print("文件（" + file + "）的字符数： " + str(len(data)))
 
 
 def get_words(file):
-    with open(file, 'r') as f:
+    with open(file, 'r', encoding='UTF-8') as f:
         data = f.read()
         # 将所有不是英文的字符replace成空格，使用split查询list长度即可
         data = re.sub('[^a-zA-Z]', ' ', data)
@@ -47,13 +48,13 @@ def get_words(file):
 
 
 def get_lines(file):
-    with open(file, 'r') as f:
+    with open(file, 'r', encoding='UTF-8') as f:
         data = f.read()
         print("文件（" + file + "）的行数： " + str(len(data.split("\n"))))
 
 
 def get_appends(file):
-    with open(file, 'r') as f:
+    with open(file, 'r', encoding='UTF-8') as f:
         data = f.read()
     empty = 0
     code = 0
@@ -151,4 +152,6 @@ def main():
 
 
 if __name__ == '__main__':
+    pretime = time.time()
     main()
+    print("处理完成！共使用：" + str(time.time() - pretime) + "秒")

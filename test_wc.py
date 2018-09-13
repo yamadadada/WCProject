@@ -6,6 +6,7 @@ from wc import get_lines
 from wc import get_appends
 from wc import get_file_recursive
 from wc import get_file
+from wc import command_parse
 
 
 class TestGet_chars(TestCase):
@@ -25,7 +26,7 @@ class TestGet_lines(TestCase):
 
 class TestGet_appends(TestCase):
     def test_get_appends(self):
-        file = r'D:\test\test1.txt'
+        file = r'D:\test\cppbigtest\json\benchmarks\src\benchmarks.cpp'
         get_appends(file)
 
 
@@ -41,6 +42,11 @@ class TestGet_file(TestCase):
         TestCase.assertTrue(self, len(file_list) > 0)
 
 
+class TestCommand_parse(TestCase):
+    def test_command_parse(self):
+        command_parse()
+
+
 class TestMain(TestCase):
     def test_main(self):
         os.system(r"python wc.py -c -w -l -a -s D:\test\*.cpp")
@@ -50,3 +56,4 @@ class TestMain(TestCase):
         TestGet_lines.test_get_lines(self)
         TestGet_words.test_get_words(self)
         TestGet_chars.test_get_chars(self)
+        TestCommand_parse.test_command_parse(self)
